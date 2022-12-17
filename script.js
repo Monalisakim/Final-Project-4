@@ -1,3 +1,5 @@
+let _lat = 0;
+let _lng = 0;
 let weather = {
     apiKey: "8ca78e034a25bdeac5ce35d208c2941c",
     fetchWeather: function (city) {
@@ -14,18 +16,29 @@ let weather = {
           }
           return response.json();
         })
-        .then((data) => this.displayWeather(data));
+        .then((data) => {
+          this.displayWeather(data)
+          this.displayMaps(data)
+        });
     },
+
+    displayMaps: function (data) {
+      const latitude = data.coord.lat;
+      const longitude = data.coord.lon;
+      const { name } = data;
+      _lat = latitude;
+      _lng = longitude;
+      document.querySelector(".map").innerHTML = ""
+      document.querySelector(".map").innerHTML = `<div id="map"></div>`
+      generateMaps(_lat,_lng,name)
+    },
+
     displayWeather: function (data) {
       const { name } = data;
       const { icon, description } = data.weather[0];
       const { temp, humidity } = data.main;
       const { speed } = data.wind;
-      const latitude = data.coord.lat;
-      const longitude = data.coord.lon;
       console.log(data.coord)
-      
-      
       document.querySelector(".city").innerText = "Cuaca di " + name;
       document.querySelector(".icon").src =
         "https://openweathermap.org/img/wn/" + icon + "@2x.png";
@@ -46,6 +59,7 @@ let weather = {
   
   document.querySelector(".search button").addEventListener("click", function () {
     weather.search();
+
   });
   
   document
@@ -62,11 +76,11 @@ let weather = {
       let lng = position.coords.longitude;
      console.log(lat,lng)
      fetchLatLng(lat,lng)
-     generateMaps(lat,lng)
+     generateMaps(lat,lng,"Your Location")
     }
     
     
-  function fetchLatLng(latitude,longitude) {
+  function fetchLatLng(latitude,longitude,name) {
     fetch(
       "https://api.openweathermap.org/data/2.5/weather?lat=" +
         latitude +
@@ -88,26 +102,21 @@ let weather = {
   }
 
   function generateMaps(lat,lng) {
-    // Initialize the map and assign it to a variable for later use
-    // there's a few ways to declare a VARIABLE in javascript.
-    // you might also see people declaring variables using `const` and `let`
+    
     var map = L.map('map', {
-      // Set latitude and longitude of the map center (required)
       center: [lat, lng],
-      // Set the initial zoom level, values 0-18, where 0 is most zoomed-out (required)
       zoom: 11
     });
-
     // Create a Tile Layer and add it to the map
     var tiles = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    minZoom: '8'}).addTo(map);
+    minZoom: '15'}).addTo(map);
 
     var marker = L.marker(
     [lat, lng],
     { 
       draggable: true,
-      title: "",
+      title: "location",
       opacity: 0.75
     });
 
@@ -120,7 +129,7 @@ let weather = {
     })
   }
 
-  function showTime(){
+    function showTime(){
     var date = new Date();
     var h = date.getHours(); // 0 - 23
     var m = date.getMinutes(); // 0 - 59

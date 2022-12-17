@@ -12,17 +12,20 @@
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
     <style>
       #map { 
-        height: 100vh;
+        height: 45vh;
         border-radius: 20px;
       }
 
       .leaflet-popup-content-wrapper {
         width: 100%;
       }
+      @media screen and (max-width: 768px) {
+        .card-con{display: flex;flex-direction: column;}
+      }
     </style>
   </head>
   <body style="background-image: url('https://images.unsplash.com/photo-1463947628408-f8581a2f4aca?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80');
-  background-repeat: no-repeat;background-size: cover;background-attachment: fixed;padding: 0 30vh;">
+  background-repeat: no-repeat;background-size: cover;background-attachment: fixed;padding: 0 0vh;">
     <section id="home">
       <div class="container text-center mt-5" style=" padding: 2vh 0 5vh 0;background-color: #ffffff8a;">
         <img src="img/icons8-weather-48.png" alt="logo" />
@@ -30,7 +33,7 @@
         <div id="MyClockDisplay" class="clock" style="font-size: 24px;font-weight: 500;" onload="showTime()"></div>
       </div>
       <div class="container" style="height: 500px; ">
-        <div class="col text-center card-con" >
+        <div class="row text-center card-con" >
           <div class="col mt-5">
             <div class="card" style="background: #000000d0;height: 60vh; border-radius: 20px;">
               <div class="search" style="padding: 5vh ;">
@@ -55,11 +58,12 @@
             </div>
           </div>
           <div class="col mt-5">
-            <div class="card" style="background-color: #000000d0; color: #f2f2f2; height: 100vh; border-radius: 20px;padding: 5vh;">
+            <div class="card" style="background-color: #000000d0; color: #f2f2f2; height: 100vh; border-radius: 20px;padding: 5vh;height: 60vh;">
               <img src="" alt="" />
               <h3>Maps Location</h3>
-              <div class="latitude mt-3"></div>
-              <div id="map"></div> 
+              <div class="map">
+                <div id="map"></div> 
+              </div>
             </div>
           </div>
         </div>
